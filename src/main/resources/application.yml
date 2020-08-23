@@ -1,0 +1,10 @@
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+spring:
+  datasource:
+    name: taomao
+    url: jdbc:mysql://127.0.0.1:3306/taomao?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: admin
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
