@@ -1,6 +1,8 @@
 package com.mt.taomao.controller;
 
 import com.mt.taomao.controller.viewobject.UserVO;
+import com.mt.taomao.exception.BusinessException;
+import com.mt.taomao.exception.EmBusinessError;
 import com.mt.taomao.service.UserService;
 import com.mt.taomao.service.model.UserModel;
 import com.mt.taomao.util.response.CommonReturnType;
@@ -27,9 +29,13 @@ public class UserController {
     UserService userService;
 
     @GetMapping("/get")
-    public CommonReturnType getUser(@RequestParam("id") Integer id) {
+    public CommonReturnType getUser(@RequestParam("id") Integer id) throws BusinessException {
         // 通过调用userServcie服务根据用户id获取用户信息
         UserModel userModel = userService.getUserById(id);
+        // 若获取的用户信息不存在
+        if(userModel == null) {
+            throw new BusinessException(EmBusinessError.USER_NOT_EXIT);
+        }
         // 将核心领域模型用户对象转为可供UI使用的viewobject
         UserVO userVO = covertFromDataObjcet(userModel);
         return CommonReturnType.create(userVO);
@@ -48,4 +54,6 @@ public class UserController {
         BeanUtils.copyProperties(userModel,userVO);
         return userVO;
     }
+
+
 }
