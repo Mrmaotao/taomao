@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController("user")
 @RequestMapping("/user")
-public class UserController {
+public class UserController extends BaseController{
 
     @Autowired
     UserService userService;
@@ -33,7 +33,7 @@ public class UserController {
         // 通过调用userServcie服务根据用户id获取用户信息
         UserModel userModel = userService.getUserById(id);
         // 若获取的用户信息不存在
-        if(userModel == null) {
+        if (userModel == null) {
             throw new BusinessException(EmBusinessError.USER_NOT_EXIT);
         }
         // 将核心领域模型用户对象转为可供UI使用的viewobject
@@ -42,7 +42,8 @@ public class UserController {
     }
 
     /**
-     *  将核心领域模型用户对象转为可供UI使用的viewobject
+     * 将核心领域模型用户对象转为可供UI使用的viewobject
+     *
      * @param userModel
      * @return
      */
@@ -51,9 +52,10 @@ public class UserController {
         if (userModel == null) {
             return null;
         }
-        BeanUtils.copyProperties(userModel,userVO);
+        BeanUtils.copyProperties(userModel, userVO);
         return userVO;
     }
+
 
 
 }

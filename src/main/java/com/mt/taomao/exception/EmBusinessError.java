@@ -7,8 +7,9 @@ package com.mt.taomao.exception;
 public enum EmBusinessError implements CommonError {
     // 通用错误信息
     PARAMETER_VALIDATION_ERROR("0001","参数不合法！"),
-    // 10000开头为用户信息相关错误定义
-    USER_NOT_EXIT("10001","该用户不存在！");
+    PARAMETER_UNKNOWN_ERROR("10001","未知错误！"),
+    // 20000开头为用户信息相关错误定义
+    USER_NOT_EXIT("20001","该用户不存在！");
     private String ErrorCode;
     private String ErrorMsg;
 

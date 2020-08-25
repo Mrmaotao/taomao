@@ -6,7 +6,7 @@ package com.mt.taomao.exception;/**
 /**
  * @ProjectName:taomao
  * @ClassName:BusinessException
- * @Description TODO
+ * @Description 业务异常类
  * @Author maotao
  * @Date 2020/8/24 22:41
  * @Version 1.0
