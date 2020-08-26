@@ -7,8 +7,13 @@ import com.mt.taomao.dao.UserDOMapper;
 import com.mt.taomao.dao.UserPasswordDOMapper;
 import com.mt.taomao.dataobject.UserDO;
 import com.mt.taomao.dataobject.UserPasswordDO;
+import com.mt.taomao.exception.BusinessException;
+import com.mt.taomao.exception.CommonError;
+import com.mt.taomao.exception.EmBusinessError;
 import com.mt.taomao.service.UserService;
 import com.mt.taomao.service.model.UserModel;
+import com.mt.taomao.util.response.CommonReturnType;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,5 +65,21 @@ public class UserServiceImpl implements UserService {
         // 通过用户id获取对应的用户加密密码信息
         UserPasswordDO userPasswordDO = userPasswordDOMapper.getUserPasswordByUserId(id);
         return covertFromDataObect(userDO, userPasswordDO);
+    }
+
+    @Override
+    public void registUser(UserModel userModel) throws  BusinessException {
+        // 判断userModel是否为空
+        if(userModel == null) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        }
+        // UserModel转为UserDO对象
+
+        // 调用插入操作的mapper
+    }
+
+    private UserDO covertFromDataObject(UserModel userModel,UserDO userDO){
+        return null;
+
     }
 }

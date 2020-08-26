@@ -25,5 +25,4 @@ public class UserModel {
     private String thirdPartyId;
     // 加密密码
     private String encrptPassword;
-
 }

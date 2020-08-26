@@ -1,5 +1,6 @@
 package com.mt.taomao.service;
 
+import com.mt.taomao.exception.BusinessException;
 import com.mt.taomao.service.model.UserModel;
 
 /**
@@ -13,5 +14,11 @@ public interface UserService {
      * @return
      */
     public UserModel getUserById(Integer id);
+
+    /**
+     * 注册用户
+     * @param userModel
+     */
+    public void registUser(UserModel userModel) throws  BusinessException;
 
 }
