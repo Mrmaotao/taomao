@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * @ProjectName:taomao
@@ -33,6 +34,75 @@ public class UserServiceImpl implements UserService {
     UserDOMapper userDOMapper;
     @Autowired
     UserPasswordDOMapper userPasswordDOMapper;
+
+    @Override
+    public UserModel getUserById(Integer id) {
+        // 调用UserDOmapper获取dataobject
+        UserDO userDO = userDOMapper.selectByPrimaryKey(id);
+        // 该用户不存在
+        if (userDO == null) {
+            return null;
+        }
+        // 通过用户id获取对应的用户加密密码信息
+        UserPasswordDO userPasswordDO = userPasswordDOMapper.getUserPasswordByUserId(id);
+        return covertFromDataObect(userDO, userPasswordDO);
+    }
+
+    /**
+     *  注册用户信息
+     * @param userModel
+     * @throws BusinessException
+     */
+    @Override
+    public void registUser(UserModel userModel) throws BusinessException {
+        // 判断userModel是否为空
+        if (userModel == null) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        }
+        // UserModel转为UserDO对象
+        UserDO userDO = covertFromDataObject(userModel);
+        // 调用插入操作的mapper
+        userDOMapper.insertSelective(userDO);
+        // userModel 转为UserPasswordDO对象
+        UserPasswordDO userPasswordDO = covertFromDateObject(userModel);
+        // 调用UserPasswordDOMapper插入操作
+        userPasswordDOMapper.insertSelective(userPasswordDO);
+       return;
+    }
+
+    /**
+     *  将userModel对象转为UserPasswordDO对象
+     * @param userModel
+     * @return
+     */
+    private UserPasswordDO covertFromDateObject(UserModel userModel) {
+        // 判空
+        if(userModel == null){
+            return null;
+        }
+        UserPasswordDO userPasswordDO = new UserPasswordDO();
+        userPasswordDO.setEncrptPassword(userModel.getEncrptPassword());
+        userPasswordDO.setUserId(userModel.getId());
+        return userPasswordDO;
+    }
+
+    /**
+     *  将userModel 转为UserDO对象
+     * @param userModel
+     * @return
+     * @throws BusinessException
+     */
+    private UserDO covertFromDataObject(UserModel userModel) throws BusinessException {
+        if (StringUtils.isEmpty(userModel.getName()) ||
+                StringUtils.isEmpty(userModel.getTelephone()) ||
+                userModel.getAge() == null ||
+                userModel.getGender() == null) {
+            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
+        }
+        UserDO userDO = new UserDO();
+        BeanUtils.copyProperties(userModel, userDO);
+        return userDO;
+    }
 
     /**
      * 将用户userDO和userPasswordDO转为UserModel对象
@@ -52,34 +122,5 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userDO, userModel);
         userModel.setEncrptPassword(userPasswordDO.getEncrptPassword());
         return userModel;
-    }
-
-    @Override
-    public UserModel getUserById(Integer id) {
-        // 调用UserDOmapper获取dataobject
-        UserDO userDO = userDOMapper.selectByPrimaryKey(id);
-        // 该用户不存在
-        if (userDO == null) {
-            return null;
-        }
-        // 通过用户id获取对应的用户加密密码信息
-        UserPasswordDO userPasswordDO = userPasswordDOMapper.getUserPasswordByUserId(id);
-        return covertFromDataObect(userDO, userPasswordDO);
-    }
-
-    @Override
-    public void registUser(UserModel userModel) throws  BusinessException {
-        // 判断userModel是否为空
-        if(userModel == null) {
-            throw new BusinessException(EmBusinessError.PARAMETER_VALIDATION_ERROR);
-        }
-        // UserModel转为UserDO对象
-
-        // 调用插入操作的mapper
-    }
-
-    private UserDO covertFromDataObject(UserModel userModel,UserDO userDO){
-        return null;
-
     }
 }

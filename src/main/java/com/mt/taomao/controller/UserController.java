@@ -11,6 +11,7 @@ import com.mt.taomao.util.response.CommonReturnType;
 import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -89,6 +90,7 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/regist")
+    @Transactional
     public CommonReturnType registUser(@RequestParam("telephone")String telephone,
                                        @RequestParam("opt")String opt,
                                        @RequestParam("name")String name,
@@ -108,8 +110,8 @@ public class UserController extends BaseController {
         userModel.setRegisterModel("bywechat");
         userModel.setTelephone(telephone);
         userModel.setEncrptPassword(MD5Encoder.encode(password.getBytes()));
-
-        return  null;
+        userService.registUser(userModel);
+        return  CommonReturnType.create(null);
     }
 
 

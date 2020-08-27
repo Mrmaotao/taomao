@@ -21,4 +21,5 @@ public interface UserService {
      */
     public void registUser(UserModel userModel) throws  BusinessException;
 
+
 }
